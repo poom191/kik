@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Heart</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#000;
+    overflow:hidden;
+}
+
+canvas{
+    display:block;
+}
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<script>
+const canvas = document.getElementById("c");
+const ctx = canvas.getContext("2d");
+
+function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+function heart(t){
+    return{
+        x:16*Math.pow(Math.sin(t),3),
+        y:-(13*Math.cos(t)
+            -5*Math.cos(2*t)
+            -2*Math.cos(3*t)
+            -Math.cos(4*t))
+    };
+}
+
+let offset = 0;
+
+function draw(){
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+
+    const scale = Math.min(canvas.width, canvas.height) / 38;
+
+    ctx.fillStyle = "#ff9acb";
+    ctx.shadowColor = "#ff69b4";
+    ctx.shadowBlur = 12;
+
+    const fontSize = Math.max(
+        12,
+        Math.min(canvas.width, canvas.height) / 45
+    );
+
+    ctx.font = `bold ${fontSize}px Arial`;
+
+    for(let i = 0; i < 220; i++){
+
+        const t = (i + offset) * 0.07;
+
+        const p = heart(t);
+
+        const x = cx + p.x * scale;
+        const y = cy + p.y * scale;
+
+        ctx.fillText("I love you", x, y);
+    }
+
+    offset += 0.02;
+
+    requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+
+</body>
+</html>
